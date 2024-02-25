@@ -3,8 +3,19 @@ services:
   web:
     build:
       context: .
+    develop:
+      # we specify the files to watch for changes
+      watch:
+        # it'll watch for changes in package.json and package-lock.json and rebuild the container if there are any changes
+        - path: /package.json
+          action: rebuild
+        - path: /package-lock.json
+          action: rebuild
+        # it'll watch for changes in the frontend directory and sync the changes with the container real time
+        - path: .
+          target: /app
+          action: sync
     ports:
       - 5173:5173
     volumes:
-      - .:/app
       - /app/node_modules
